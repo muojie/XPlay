@@ -62,6 +62,15 @@ bool FFDecode::Open(XParameter para)
         return false;
     }
 
+    if(codec->codec_type == AVMEDIA_TYPE_VIDEO)
+    {
+        this->isAudio = false;
+    }
+    else
+    {
+        this->isAudio = true;
+    }
+
     XLOGI("avcodec_open2 success!");
     return true;
 }
@@ -77,6 +86,7 @@ bool FFDecode::SendPacket(XData pkt)
     {
         return false;
     }
+
     return true;
 }
 
@@ -100,5 +110,8 @@ XData FFDecode::RecvFrame()
     d.data = (unsigned char *)frame;
     if(codec->codec_type == AVMEDIA_TYPE_VIDEO)
         d.size = (frame->linesize[0] + frame->linesize[1] + frame->linesize[2])*frame->height;
+    else
+        //样本字节数 * 单通道样本数 * 通道数
+        d.size = av_get_bytes_per_sample((AVSampleFormat)frame->format)*frame->nb_samples*2;
     return d;
 }
