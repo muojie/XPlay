@@ -36,7 +36,7 @@ class TestObs:public IObserver
 public:
     void Update(XData d)
     {
-        XLOGI("TestObs Update data size is %d",d.size);
+        //XLOGI("TestObs Update data size is %d",d.size);
     }
 };
 
@@ -64,6 +64,8 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
     de->Open("/sdcard/1080.mp4");
 
     IDecode *vdecode = new FFDecode();
+    vdecode->Open(de->GetVPara());
+
     //vdecode->Open();
     de->Start();
     XSleep(3000);
