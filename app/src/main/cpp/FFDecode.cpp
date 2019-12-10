@@ -24,57 +24,43 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-#include <jni.h>
-#include <string>
-
-#include "FFDemux.h"
-#include "XLog.h"
-#include "FFDecode.h"
-
-class TestObs:public IObserver
-{
-public:
-    void Update(XData d)
-    {
-        XLOGI("TestObs Update data size is %d",d.size);
-    }
-};
-
-
-
+//
+// Created by Administrator on 2018-03-02.
+//
 extern "C"
-JNIEXPORT jstring
+{
+    #include <libavcodec/avcodec.h>
+}
 
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
+#include "FFDecode.h"
+#include "XLog.h"
 
-    //XLOGI("S begin!");
-    //XSleep(3000);
-    //XLOGI("S end!");
-    //return env->NewStringUTF(hello.c_str());
-
-    ///////////////////////////////////
-    ///测试用代码
-    TestObs *tobs = new TestObs();
-    IDemux *de = new FFDemux();
-    de->AddObs(tobs);
-    de->Open("/sdcard/1080.mp4");
-
-    IDecode *vdecode = new FFDecode();
-    //vdecode->Open();
-    de->Start();
-    XSleep(3000);
-    de->Stop();
-    /*for(;;)
+bool FFDecode::Open(XParameter para)
+{
+    if(!para.para) return false;
+    AVCodecParameters *p = para.para;
+    //1 查找解码器
+    AVCodec *cd = avcodec_find_decoder(p->codec_id);
+    if(!cd)
     {
-        XData d = de->Read();
-        XLOGI("Read data size is %d",d.size);
+        XLOGE("avcodec_find_decoder %d failed!",p->codec_id);
+        return false;
+    }
+    XLOGI("avcodec_find_decoder success!");
+    //2 创建解码上下文，并复制参数
+    codec = avcodec_alloc_context3(cd);
+    avcodec_parameters_to_context(codec,p);
 
+    //3 打开解码器
+    int re = avcodec_open2(codec,0,0);
+    if(re != 0)
+    {
+        char buf[1024] = {0};
+        av_strerror(re,buf,sizeof(buf)-1);
+        XLOGE("%s",buf);
+        return false;
+    }
 
-    }*/
-
-    return env->NewStringUTF(hello.c_str());
+    XLOGI("avcodec_open2 success!");
+    return true;
 }

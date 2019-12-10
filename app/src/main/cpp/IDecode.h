@@ -24,57 +24,24 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-#include <jni.h>
-#include <string>
+//
+// Created by Administrator on 2018-03-02.
+//
 
-#include "FFDemux.h"
-#include "XLog.h"
-#include "FFDecode.h"
+#ifndef XPLAY_IDECODE_H
+#define XPLAY_IDECODE_H
 
-class TestObs:public IObserver
+#include "XParameter.h"
+#include "IObserver.h"
+
+//解码接口，支持硬解码
+class IDecode:public IObserver
 {
 public:
-    void Update(XData d)
-    {
-        XLOGI("TestObs Update data size is %d",d.size);
-    }
+    //打开解码器
+    virtual bool Open(XParameter para) = 0;
+
 };
 
 
-
-extern "C"
-JNIEXPORT jstring
-
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-
-    //XLOGI("S begin!");
-    //XSleep(3000);
-    //XLOGI("S end!");
-    //return env->NewStringUTF(hello.c_str());
-
-    ///////////////////////////////////
-    ///测试用代码
-    TestObs *tobs = new TestObs();
-    IDemux *de = new FFDemux();
-    de->AddObs(tobs);
-    de->Open("/sdcard/1080.mp4");
-
-    IDecode *vdecode = new FFDecode();
-    //vdecode->Open();
-    de->Start();
-    XSleep(3000);
-    de->Stop();
-    /*for(;;)
-    {
-        XData d = de->Read();
-        XLOGI("Read data size is %d",d.size);
-
-
-    }*/
-
-    return env->NewStringUTF(hello.c_str());
-}
+#endif //XPLAY_IDECODE_H
