@@ -28,6 +28,8 @@
 #include <string>
 
 #include "FFDemux.h"
+#include "XLog.h"
+
 extern "C"
 JNIEXPORT jstring
 
@@ -37,8 +39,18 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
         jobject /* this */) {
     std::string hello = "Hello from C++";
 
+
+    ///////////////////////////////////
+    ///测试用代码
     IDemux *de = new FFDemux();
     de->Open("/sdcard/1080.mp4");
+    for(;;)
+    {
+        XData d = de->Read();
+        XLOGI("Read data size is %d",d.size);
+
+
+    }
 
     return env->NewStringUTF(hello.c_str());
 }
