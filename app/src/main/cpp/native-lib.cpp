@@ -39,12 +39,18 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
         jobject /* this */) {
     std::string hello = "Hello from C++";
 
+    //XLOGI("S begin!");
+    //XSleep(3000);
+    //XLOGI("S end!");
+    //return env->NewStringUTF(hello.c_str());
 
     ///////////////////////////////////
     ///测试用代码
     IDemux *de = new FFDemux();
     de->Open("/sdcard/1080.mp4");
     de->Start();
+    XSleep(3000);
+    de->Stop();
     /*for(;;)
     {
         XData d = de->Read();

@@ -33,10 +33,11 @@
 
 void IDemux::Main()
 {
-    for(;;)
+    while(!isExit)
     {
+
         XData d = Read();
-        XLOGI("IDemux Read %d",d.size);
-        if(d.size<=0)break;
+        //XLOGI("IDemux Read %d",d.size);
+        //if(d.size<=0)break;
     }
 }
