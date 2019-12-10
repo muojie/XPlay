@@ -44,13 +44,14 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
     ///测试用代码
     IDemux *de = new FFDemux();
     de->Open("/sdcard/1080.mp4");
-    for(;;)
+    de->Start();
+    /*for(;;)
     {
         XData d = de->Read();
         XLOGI("Read data size is %d",d.size);
 
 
-    }
+    }*/
 
     return env->NewStringUTF(hello.c_str());
 }

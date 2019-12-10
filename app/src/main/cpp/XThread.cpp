@@ -28,27 +28,28 @@
 // Created by Administrator on 2018-03-01.
 //
 
-#ifndef XPLAY_IDEMUX_H
-#define XPLAY_IDEMUX_H
-
-#include "XData.h"
 #include "XThread.h"
+#include "XLog.h"
 
-//解封装接口
-class IDemux: public XThread {
-public:
-    //打开文件，或者流媒体 rmtp http rtsp
-    virtual bool Open(const char *url) = 0;
+#include <thread>
+using namespace std;
 
-    //读取一帧数据，数据由调用者清理
-    virtual XData Read() = 0;
+//启动线程
+void XThread::Start()
+{
+    thread th(&XThread::ThreadMain,this);
+    th.detach();
+}
+void XThread::ThreadMain()
+{
+    XLOGI("线程函数进入");
+    Main();
+    XLOGI("线程函数退出");
+}
 
-    //总时长（毫秒）
-    int totalMs = 0;
-protected:
-    virtual void Main();
 
-};
+//通过控制isExit安全停止线程（不一定成功）
+void XThread::Stop()
+{
 
-
-#endif //XPLAY_IDEMUX_H
+}
