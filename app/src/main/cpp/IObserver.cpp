@@ -24,53 +24,31 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-#include <jni.h>
-#include <string>
+//
+// Created by Administrator on 2018-03-01.
+//
 
-#include "FFDemux.h"
-#include "XLog.h"
+#include "IObserver.h"
 
-class TestObs:public IObserver
+
+//主体函数 添加观察者
+void IObserver::AddObs(IObserver *obs)
 {
-public:
-    void Update(XData d)
+    if(!obs)return;
+    mux.lock();
+    obss.push_back(obs);
+    mux.unlock();
+}
+
+//通知所有观察者
+void IObserver::Notify(XData data)
+{
+
+    mux.lock();
+    for(int i =0; i < obss.size(); i++)
     {
-        XLOGI("TestObs Update data size is %d",d.size);
+        obss[i]->Update(data);
     }
-};
+    mux.unlock();
 
-
-
-extern "C"
-JNIEXPORT jstring
-
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-
-    //XLOGI("S begin!");
-    //XSleep(3000);
-    //XLOGI("S end!");
-    //return env->NewStringUTF(hello.c_str());
-
-    ///////////////////////////////////
-    ///测试用代码
-    TestObs *tobs = new TestObs();
-    IDemux *de = new FFDemux();
-    de->AddObs(tobs);
-    de->Open("/sdcard/1080.mp4");
-    de->Start();
-    XSleep(3000);
-    de->Stop();
-    /*for(;;)
-    {
-        XData d = de->Read();
-        XLOGI("Read data size is %d",d.size);
-
-
-    }*/
-
-    return env->NewStringUTF(hello.c_str());
 }

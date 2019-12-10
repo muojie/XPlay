@@ -24,53 +24,35 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-#include <jni.h>
-#include <string>
+//
+// Created by Administrator on 2018-03-01.
+//
 
-#include "FFDemux.h"
-#include "XLog.h"
+#ifndef XPLAY_IOBSERVER_H
+#define XPLAY_IOBSERVER_H
 
-class TestObs:public IObserver
+#include "XData.h"
+#include "XThread.h"
+#include <vector>
+#include <mutex>
+
+//观察者 和 主体
+class IObserver:public XThread
 {
 public:
-    void Update(XData d)
-    {
-        XLOGI("TestObs Update data size is %d",d.size);
-    }
+    //观察者接收数据函数
+    virtual void Update(XData data) {}
+
+    //主体函数 添加观察者(线程安全)
+    void AddObs(IObserver *obs);
+
+    //通知所有观察者(线程安全)
+    void Notify(XData data);
+
+protected:
+    std::vector<IObserver *>obss;
+    std::mutex mux;
 };
 
 
-
-extern "C"
-JNIEXPORT jstring
-
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-
-    //XLOGI("S begin!");
-    //XSleep(3000);
-    //XLOGI("S end!");
-    //return env->NewStringUTF(hello.c_str());
-
-    ///////////////////////////////////
-    ///测试用代码
-    TestObs *tobs = new TestObs();
-    IDemux *de = new FFDemux();
-    de->AddObs(tobs);
-    de->Open("/sdcard/1080.mp4");
-    de->Start();
-    XSleep(3000);
-    de->Stop();
-    /*for(;;)
-    {
-        XData d = de->Read();
-        XLOGI("Read data size is %d",d.size);
-
-
-    }*/
-
-    return env->NewStringUTF(hello.c_str());
-}
+#endif //XPLAY_IOBSERVER_H
