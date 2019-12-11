@@ -31,6 +31,7 @@
 #include "FFDemux.h"
 #include "XLog.h"
 #include "FFDecode.h"
+#include "XEGL.h"
 
 class TestObs:public IObserver
 {
@@ -95,6 +96,7 @@ Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) 
 
     // TODO
     ANativeWindow *win = ANativeWindow_fromSurface(env,surface);
+    XEGL::Get()->Init(win);
 
 
 }
