@@ -25,34 +25,17 @@
 
 
 //
-// Created by Administrator on 2018-03-01.
+// Created by Administrator on 2018-03-05.
 //
 
-#include "XData.h"
-extern "C"{
-#include <libavformat/avformat.h>
-}
+#include "IResample.h"
+#include "XLog.h"
 
-bool XData::Alloc(int size,const char *d)
+void IResample::Update(XData data)
 {
-    Drop();
-    type = UCHAR_TYPE;
-    if(size <=0)return false;
-    this->data = new unsigned char[size];
-    if(!this->data) return false;
-    if(d)
+    XData d = this->Resample(data);
+    if(d.size > 0)
     {
-        memcpy(this->data,d,size);
+        this->Notify(d);
     }
-    return true;
-}
-void XData::Drop()
-{
-    if(!data) return;
-    if(type == AVPACKET_TYPE)
-        av_packet_free((AVPacket **)&data);
-    else
-        delete data;
-    data = 0;
-    size = 0;
 }

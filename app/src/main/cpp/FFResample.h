@@ -25,34 +25,24 @@
 
 
 //
-// Created by Administrator on 2018-03-01.
+// Created by Administrator on 2018-03-05.
 //
 
-#include "XData.h"
-extern "C"{
-#include <libavformat/avformat.h>
-}
+#ifndef XPLAY_FFRESAMPLE_H
+#define XPLAY_FFRESAMPLE_H
 
-bool XData::Alloc(int size,const char *d)
+
+#include "IResample.h"
+struct SwrContext;
+class FFResample: public IResample
 {
-    Drop();
-    type = UCHAR_TYPE;
-    if(size <=0)return false;
-    this->data = new unsigned char[size];
-    if(!this->data) return false;
-    if(d)
-    {
-        memcpy(this->data,d,size);
-    }
-    return true;
-}
-void XData::Drop()
-{
-    if(!data) return;
-    if(type == AVPACKET_TYPE)
-        av_packet_free((AVPacket **)&data);
-    else
-        delete data;
-    data = 0;
-    size = 0;
-}
+public:
+    virtual bool Open(XParameter in,XParameter out=XParameter());
+    virtual XData Resample(XData indata);
+protected:
+    SwrContext *actx = 0;
+
+};
+
+
+#endif //XPLAY_FFRESAMPLE_H

@@ -25,34 +25,24 @@
 
 
 //
-// Created by Administrator on 2018-03-01.
+// Created by Administrator on 2018-03-05.
 //
 
-#include "XData.h"
-extern "C"{
-#include <libavformat/avformat.h>
-}
+#ifndef XPLAY_IRESAMPLE_H
+#define XPLAY_IRESAMPLE_H
 
-bool XData::Alloc(int size,const char *d)
+#include "XParameter.h"
+#include "IObserver.h"
+
+class IResample: public IObserver
 {
-    Drop();
-    type = UCHAR_TYPE;
-    if(size <=0)return false;
-    this->data = new unsigned char[size];
-    if(!this->data) return false;
-    if(d)
-    {
-        memcpy(this->data,d,size);
-    }
-    return true;
-}
-void XData::Drop()
-{
-    if(!data) return;
-    if(type == AVPACKET_TYPE)
-        av_packet_free((AVPacket **)&data);
-    else
-        delete data;
-    data = 0;
-    size = 0;
-}
+public:
+    virtual bool Open(XParameter in,XParameter out=XParameter()) = 0;
+    virtual XData Resample(XData indata) = 0;
+    virtual void Update(XData data);
+    int outChannels = 2;
+    int outFormat = 1;
+};
+
+
+#endif //XPLAY_IRESAMPLE_H
