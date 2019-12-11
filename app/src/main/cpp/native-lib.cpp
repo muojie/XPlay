@@ -33,6 +33,8 @@
 #include "FFDecode.h"
 #include "XEGL.h"
 #include "XShader.h"
+#include "IVideoView.h"
+#include "GLVideoView.h"
 
 class TestObs:public IObserver
 {
@@ -44,7 +46,7 @@ public:
 };
 
 
-
+IVideoView *view = NULL;
 extern "C"
 JNIEXPORT jstring
 
@@ -74,6 +76,10 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
     de->AddObs(vdecode);
     de->AddObs(adecode);
 
+    view = new GLVideoView();
+    vdecode->AddObs(view);
+
+
     //vdecode->Open();
     de->Start();
     vdecode->Start();
@@ -97,9 +103,10 @@ Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) 
 
     // TODO
     ANativeWindow *win = ANativeWindow_fromSurface(env,surface);
-    XEGL::Get()->Init(win);
-    XShader shader;
-    shader.Init();
+    view->SetRender(win);
+    //XEGL::Get()->Init(win);
+    //XShader shader;
+    //shader.Init();
 
 
 }
