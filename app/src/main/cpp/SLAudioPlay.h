@@ -25,22 +25,21 @@
 
 
 //
-// Created by Administrator on 2018-03-02.
+// Created by Administrator on 2018-03-05.
 //
 
-#ifndef XPLAY_XPARAMETER_H
-#define XPLAY_XPARAMETER_H
+#ifndef XPLAY_SLAUDIOPLAY_H
+#define XPLAY_SLAUDIOPLAY_H
 
 
+#include "IAudioPlay.h"
 
-struct AVCodecParameters;
-class XParameter
+class SLAudioPlay: public IAudioPlay
 {
 public:
-    AVCodecParameters *para = 0;
-    int channels = 2;
-    int sample_rate = 44100;
+    virtual bool StartPlay(XParameter out);
+    void PlayCall(void *bufq);
 };
 
 
-#endif //XPLAY_XPARAMETER_H
+#endif //XPLAY_SLAUDIOPLAY_H
