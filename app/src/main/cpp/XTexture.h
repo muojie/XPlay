@@ -32,8 +32,11 @@
 #define XPLAY_XTEXTURE_H
 
 
-class XTexture {
-
+class XTexture
+{
+public:
+    static XTexture *Create();
+    virtual bool Init(void *win) = 0;
 };
 
 
