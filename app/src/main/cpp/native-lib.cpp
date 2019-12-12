@@ -48,30 +48,13 @@ public:
     }
 };
 
-
+IVideoView *view = NULL;
 extern "C"
 JNIEXPORT
 jint JNI_OnLoad(JavaVM *vm,void *res)
 {
     FFDecode::InitHard(vm);
-    return JNI_VERSION_1_4;
-}
 
-
-IVideoView *view = NULL;
-extern "C"
-JNIEXPORT jstring
-
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-
-    //XLOGI("S begin!");
-    //XSleep(3000);
-    //XLOGI("S end!");
-    //return env->NewStringUTF(hello.c_str());
 
     ///////////////////////////////////
     ///测试用代码
@@ -107,6 +90,28 @@ Java_xplay_xplay_MainActivity_stringFromJNI(
     de->Start();
     vdecode->Start();
     adecode->Start();
+
+
+
+    return JNI_VERSION_1_4;
+}
+
+
+
+extern "C"
+JNIEXPORT jstring
+
+JNICALL
+Java_xplay_xplay_MainActivity_stringFromJNI(
+        JNIEnv *env,
+        jobject /* this */) {
+    std::string hello = "Hello from C++";
+
+    //XLOGI("S begin!");
+    //XSleep(3000);
+    //XLOGI("S end!");
+    //return env->NewStringUTF(hello.c_str());
+
 
     //XSleep(3000);
     //de->Stop();
