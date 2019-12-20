@@ -88,7 +88,7 @@ jint JNI_OnLoad(JavaVM *vm,void *res)
 
 
     IPlayer::Get()->Open("/sdcard/1080.mp4");
-
+    IPlayer::Get()->Start();
 
     //de->Start();
     //vdecode->Start();
@@ -135,6 +135,7 @@ Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) 
     // TODO
     ANativeWindow *win = ANativeWindow_fromSurface(env,surface);
     view->SetRender(win);
+    IPlayer::Get()->InitView(win);
     //XEGL::Get()->Init(win);
     //XShader shader;
     //shader.Init();
