@@ -25,50 +25,41 @@
 
 
 //
-// Created by Administrator on 2018-03-01.
+// Created by Administrator on 2018-03-07.
 //
 
+#ifndef XPLAY_IPLAYER_H
+#define XPLAY_IPLAYER_H
+
+
 #include "XThread.h"
-#include "XLog.h"
 
-#include <thread>
-using namespace std;
-void XSleep(int mis)
+class IDemux;
+class IAudioPlay;
+class IVideoView;
+class IResample;
+class IDecode;
+
+
+class IPlayer : public XThread
 {
-    chrono::milliseconds du(mis);
-    this_thread::sleep_for(du);
-}
-//启动线程
-bool XThread::Start()
-{
-    isExit = false;
-    thread th(&XThread::ThreadMain,this);
-    th.detach();
-    return true;
-}
-void XThread::ThreadMain()
-{
-    isRuning = true;
-    XLOGI("线程函数进入");
-    Main();
-    XLOGI("线程函数退出");
-    isRuning = false;
-}
+public:
+    static IPlayer *Get(unsigned char index=0);
+    virtual bool Open(const char *path);
+    virtual bool Start();
+    //是否视频硬解码
+    bool isHardDecode = true;
 
 
-//通过控制isExit安全停止线程（不一定成功）
-void XThread::Stop()
-{XLOGI("Stop 停止线程begin!");
-    isExit = true;
-    for(int i = 0; i < 200; i++)
-    {
-        if(!isRuning)
-        {
-            XLOGI("Stop 停止线程成功!");
-            return;
-        }
-        XSleep(1);
-    }
-    XLOGI("Stop 停止线程超时!");
+    IDemux *demux = 0;
+    IDecode *vdecode = 0;
+    IDecode *adecode = 0;
+    IResample *resample = 0;
+    IVideoView *videoView = 0;
+    IAudioPlay *audioPlay = 0;
+protected:
+    IPlayer(){};
+};
 
-}
+
+#endif //XPLAY_IPLAYER_H

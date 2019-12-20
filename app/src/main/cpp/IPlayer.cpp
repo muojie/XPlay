@@ -25,50 +25,54 @@
 
 
 //
-// Created by Administrator on 2018-03-01.
+// Created by Administrator on 2018-03-07.
 //
 
-#include "XThread.h"
+#include "IPlayer.h"
+#include "IDemux.h"
+#include "IDecode.h"
+#include "IAudioPlay.h"
+#include "IVideoView.h"
+#include "IResample.h"
 #include "XLog.h"
 
-#include <thread>
-using namespace std;
-void XSleep(int mis)
+IPlayer *IPlayer::Get(unsigned char index)
 {
-    chrono::milliseconds du(mis);
-    this_thread::sleep_for(du);
+    static IPlayer p[256];
+    return &p[index];
 }
-//启动线程
-bool XThread::Start()
+
+
+bool IPlayer::Open(const char *path)
 {
-    isExit = false;
-    thread th(&XThread::ThreadMain,this);
-    th.detach();
+
+    //解封装
+    if(!demux || !demux->Open(path))
+    {
+        XLOGE("demux->Open %s failed!",path);
+        return false;
+    }
+    //解码 解码可能不需要，如果是解封之后就是原始数据
+    if(!vdecode || !vdecode->Open(demux->GetVPara(),isHardDecode))
+    {
+        XLOGE("vdecode->Open %s failed!",path);
+        //return false;
+    }
+    if(!adecode || !adecode->Open(demux->GetAPara()))
+    {
+        XLOGE("adecode->Open %s failed!",path);
+        //return false;
+    }
+
+    //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
+    XParameter outPara = demux->GetAPara();
+    if(!resample || !resample->Open(demux->GetAPara(),outPara))
+    {
+        XLOGE("resample->Open %s failed!",path);
+    }
     return true;
 }
-void XThread::ThreadMain()
+bool IPlayer::Start()
 {
-    isRuning = true;
-    XLOGI("线程函数进入");
-    Main();
-    XLOGI("线程函数退出");
-    isRuning = false;
-}
-
-
-//通过控制isExit安全停止线程（不一定成功）
-void XThread::Stop()
-{XLOGI("Stop 停止线程begin!");
-    isExit = true;
-    for(int i = 0; i < 200; i++)
-    {
-        if(!isRuning)
-        {
-            XLOGI("Stop 停止线程成功!");
-            return;
-        }
-        XSleep(1);
-    }
-    XLOGI("Stop 停止线程超时!");
-
+    return true;
 }
