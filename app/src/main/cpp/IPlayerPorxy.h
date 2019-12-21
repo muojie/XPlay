@@ -24,38 +24,35 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-#include <jni.h>
-#include <string>
-#include <android/native_window_jni.h>
+//
+// Created by Administrator on 2018-03-07.
+//
 
-#include "XLog.h"
-#include "IPlayerPorxy.h"
-extern "C"
-JNIEXPORT
-jint JNI_OnLoad(JavaVM *vm,void *res)
+#ifndef XPLAY_IPLAYERPORXY_H
+#define XPLAY_IPLAYERPORXY_H
+
+
+#include "IPlayer.h"
+#include <mutex>
+class IPlayerPorxy: public IPlayer
 {
-    IPlayerPorxy::Get()->Init(vm);
-    IPlayerPorxy::Get()->Open("/sdcard/1080.mp4");
-    IPlayerPorxy::Get()->Start();
-    return JNI_VERSION_1_4;
-}
+public:
+    static IPlayerPorxy*Get()
+    {
+        static IPlayerPorxy px;
+        return &px;
+    }
+    void Init(void *vm = 0);
 
-extern "C"
-JNIEXPORT void JNICALL
-Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) {
+    virtual bool Open(const char *path);
+    virtual bool Start();
+    virtual void InitView(void *win);
 
-    // TODO
-    ANativeWindow *win = ANativeWindow_fromSurface(env,surface);
-    IPlayerPorxy::Get()->InitView(win);
-}
+protected:
+    IPlayerPorxy(){}
+    IPlayer *player = 0;
+    std::mutex mux;
+};
 
-extern "C"
-JNIEXPORT jstring
 
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
-}
+#endif //XPLAY_IPLAYERPORXY_H
