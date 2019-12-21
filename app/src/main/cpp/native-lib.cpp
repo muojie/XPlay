@@ -62,6 +62,7 @@ Java_xplay_xplay_OpenUrl_Open(JNIEnv *env, jobject instance, jstring url_) {
 
     IPlayerPorxy::Get()->Open(url);
     IPlayerPorxy::Get()->Start();
+    //IPlayerPorxy::Get()->Seek(0.5);
 
     env->ReleaseStringUTFChars(url_, url);
 }extern "C"
@@ -70,5 +71,11 @@ Java_xplay_xplay_MainActivity_PlayPos(JNIEnv *env, jobject instance) {
 
     // TODO
     return IPlayerPorxy::Get()->PlayPos();
+
+}extern "C"
+JNIEXPORT void JNICALL
+Java_xplay_xplay_MainActivity_Seek(JNIEnv *env, jobject instance, jdouble pos) {
+
+    IPlayerPorxy::Get()->Seek(pos);
 
 }

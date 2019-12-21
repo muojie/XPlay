@@ -119,7 +119,15 @@ double IPlayer::PlayPos()
     mux.unlock();
     return pos;
 }
-
+bool IPlayer::Seek(double pos)
+{
+    bool re = false;
+    mux.lock();
+    if(demux)
+        re = demux->Seek(pos);
+    mux.unlock();
+    return re;
+}
 bool IPlayer::Open(const char *path)
 {
     Close();
@@ -131,6 +139,7 @@ bool IPlayer::Open(const char *path)
         XLOGE("demux->Open %s failed!",path);
         return false;
     }
+
     //解码 解码可能不需要，如果是解封之后就是原始数据
     if(!vdecode || !vdecode->Open(demux->GetVPara(),isHardDecode))
     {
