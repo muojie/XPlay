@@ -1,5 +1,6 @@
+[toc]
 
-#【课程介绍】
+# 课程介绍
 课程包含了对流媒体（拉流）的播放，演示了播放rtmp的香港卫视，支持rtsp摄像头和http网络视频的播放，支持访问本地的视频文件，并精确显示和控制播放进度：
 1. 讲解如何编译Android平台的ffmpeg库，使其支持neon技术和硬解码，并测试性能
 2. 使用opengles的NDK shader高效播放yuv视频，不耗费cpu性能更优（GPU）
@@ -7,7 +8,7 @@
 4. 支持网络流媒体（rtmp，rtsp，http）可直接拉流播放电视并支持rtsp摄像头访问
 5. 课程将设计模式应用到实践 - 观察者，构建者，门面，代理，适配器，单件模式
 
-#【课程收益】
+# 课程收益
 1. 课程由浅入深，原理讲解+代码实操演示，并提供全部课程源码
 2. 讲解如何编译Android平台的ffmpeg库，使其支持neon和硬解码，并测试性能
 3. 使用opengles的NDK shader高效播放yuv视频，不耗费cpu性能更优
@@ -21,7 +22,7 @@
 - IAudioPlay 音频缓冲，多线程暂停
 - IPlayer 控制 Seek
 
-# resource
+# 资源
 
 ## RTMP 在线测试地址（2019.04更新）
 香港卫视,rtmp://live.hkstv.hk.lxdns.com/live/hks（已停用）  
@@ -58,6 +59,6 @@
 
 香港卫视：http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8
 
-
+## 参考
 https://github.com/CoderJackyHuang/MDArtileFiles/blob/master/%E7%9B%B4%E6%92%AD/%E7%9B%B4%E6%92%AD%E6%B5%8B%E8%AF%95%E5%9C%B0%E5%9D%80.md  
 https://www.jianshu.com/p/20f9e9bb89aa  
