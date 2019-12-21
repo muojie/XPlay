@@ -38,9 +38,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Runnable {
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Button bt;
+    private SeekBar seek;
+    private Thread th;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView( R.layout.activity_main );
         bt = findViewById( R.id.open_button );
+        seek = findViewById( R.id.aplayseek );
+        seek.setMax(1000);
         bt.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +103,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         } );
+        //启动播放进度线程
+        th = new Thread(this);
+        th.start();
     }
 
+    //播放进度显示
+    @Override
+    public void run() {
+        for(;;)
+        {
+            seek.setProgress((int)(PlayPos()*1000));
+            try {
+                Thread.sleep( 40 );
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public native double PlayPos();
 }
