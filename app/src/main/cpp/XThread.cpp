@@ -65,6 +65,7 @@ void XThread::Stop()
         if(!isRuning)
         {
             XLOGI("Stop 停止线程成功!");
+
             return;
         }
         XSleep(1);
