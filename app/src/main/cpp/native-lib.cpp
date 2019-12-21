@@ -35,8 +35,12 @@ JNIEXPORT
 jint JNI_OnLoad(JavaVM *vm,void *res)
 {
     IPlayerPorxy::Get()->Init(vm);
-    IPlayerPorxy::Get()->Open("/sdcard/1080.mp4");
+
+    IPlayerPorxy::Get()->Open("/sdcard/v1080.mp4");
     IPlayerPorxy::Get()->Start();
+
+
+
     return JNI_VERSION_1_4;
 }
 
