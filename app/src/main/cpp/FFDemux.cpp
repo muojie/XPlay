@@ -167,6 +167,7 @@ XData FFDemux::Read()
     int re = av_read_frame(ic,pkt);
     if(re != 0)
     {
+        mux.unlock();
         av_packet_free(&pkt);
         return XData();
     }
@@ -183,8 +184,8 @@ XData FFDemux::Read()
     }
     else
     {
-        av_packet_free(&pkt);
         mux.unlock();
+        av_packet_free(&pkt);
         return XData();
     }
 

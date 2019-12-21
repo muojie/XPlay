@@ -24,7 +24,7 @@
 //！！！！！！！！！ 加群23304930下载代码和交流
 
 
-//
+ //
 // Created by Administrator on 2018-03-02.
 //
 
@@ -74,6 +74,12 @@ void IDecode::Main()
 {
     while(!isExit)
     {
+        if(IsPause())
+        {
+            XSleep(2);
+            continue;
+        }
+
         packsMutex.lock();
 
         //判断音视频同步

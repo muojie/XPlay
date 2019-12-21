@@ -78,6 +78,9 @@ void IPlayer::Close()
         vdecode->Stop();
     if(adecode)
         adecode->Stop();
+     if(audioPlay)
+        audioPlay->Stop();
+
     //2 清理缓冲队列
     if(vdecode)
         vdecode->Clear();
@@ -119,10 +122,28 @@ double IPlayer::PlayPos()
     mux.unlock();
     return pos;
 }
+
+void IPlayer::SetPause(bool isP)
+{
+    mux.lock();
+    XThread::SetPause(isP);
+    if(demux)
+        demux->SetPause(isP);
+    if(vdecode)
+        vdecode->SetPause(isP);
+    if(adecode)
+        adecode->SetPause(isP);
+    if(audioPlay)
+        audioPlay->SetPause(isP);
+    mux.unlock();
+}
 bool IPlayer::Seek(double pos)
 {
     bool re = false;
     mux.lock();
+    //暂停所有线程
+
+
     if(demux)
         re = demux->Seek(pos);
     mux.unlock();
