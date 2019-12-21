@@ -37,12 +37,12 @@ void GLVideoView::SetRender(void *win)
 }
 void GLVideoView::Close()
 {
-    mux.lock();
-    if(txt)
-    {
-        txt->Drop();
-        txt = 0;
-    }
+        mux.lock();
+        if(txt)
+        {
+            txt->Drop();
+            txt = 0;
+        }
 
     mux.unlock();
 }

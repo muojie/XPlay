@@ -57,7 +57,7 @@ void IPlayer::Main()
         //同步
         //获取音频的pts 告诉视频
         int apts = audioPlay->pts;
-        XLOGE("apts = %d",apts);
+        //XLOGE("apts = %d",apts);
         vdecode->synPts = apts;
 
         mux.unlock();
@@ -166,6 +166,10 @@ bool IPlayer::Start()
 void IPlayer::InitView(void *win)
 {
     if(videoView)
+    {
+        videoView->Close();
         videoView->SetRender(win);
+    }
+
 }
 

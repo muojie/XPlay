@@ -39,7 +39,7 @@ jint JNI_OnLoad(JavaVM *vm,void *res)
     /*IPlayerPorxy::Get()->Open("/sdcard/v1080.mp4");
     IPlayerPorxy::Get()->Start();
 
-    
+
     IPlayerPorxy::Get()->Open("/sdcard/1080.mp4");
     IPlayerPorxy::Get()->Start();*/
 
@@ -55,3 +55,13 @@ Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) 
     IPlayerPorxy::Get()->InitView(win);
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_xplay_xplay_OpenUrl_Open(JNIEnv *env, jobject instance, jstring url_) {
+    const char *url = env->GetStringUTFChars(url_, 0);
+
+    IPlayerPorxy::Get()->Open(url);
+    IPlayerPorxy::Get()->Start();
+
+    env->ReleaseStringUTFChars(url_, url);
+}
