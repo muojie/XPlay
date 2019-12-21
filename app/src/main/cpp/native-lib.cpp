@@ -36,12 +36,12 @@ jint JNI_OnLoad(JavaVM *vm,void *res)
 {
     IPlayerPorxy::Get()->Init(vm);
 
-    IPlayerPorxy::Get()->Open("/sdcard/v1080.mp4");
+    /*IPlayerPorxy::Get()->Open("/sdcard/v1080.mp4");
     IPlayerPorxy::Get()->Start();
 
     
     IPlayerPorxy::Get()->Open("/sdcard/1080.mp4");
-    IPlayerPorxy::Get()->Start();
+    IPlayerPorxy::Get()->Start();*/
 
     return JNI_VERSION_1_4;
 }
@@ -55,13 +55,3 @@ Java_xplay_xplay_XPlay_InitView(JNIEnv *env, jobject instance, jobject surface) 
     IPlayerPorxy::Get()->InitView(win);
 }
 
-extern "C"
-JNIEXPORT jstring
-
-JNICALL
-Java_xplay_xplay_MainActivity_stringFromJNI(
-        JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
-}
